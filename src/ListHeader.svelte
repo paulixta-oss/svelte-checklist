@@ -48,9 +48,9 @@
   </div>
 
   <div class="dropdown-content" class:show={showMenu}>
-    <span on:click={() => checklist.checkAll()}>Todos</span>
-    <span on:click={() => checklist.uncheckAll()}>Nenhum</span>
-    <span on:click={() => checklist.toggleAll()}>Inverter</span>
+    <span on:click={() => checklist.checkAll()}>All</span>
+    <span on:click={() => checklist.uncheckAll()}>None</span>
+    <span on:click={() => checklist.toggleAll()}>Toggle</span>
     {#each options as option}
       <span on:click={() => checklist.checkOnly(option)}>{option}</span>
       <span on:click={() => checklist.checkPlus(option)}>+{option}</span>
