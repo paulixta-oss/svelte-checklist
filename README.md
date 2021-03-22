@@ -136,9 +136,12 @@ The custom Header component is rendered once per checklist, it has full access t
 <script>
   export let checklist
 </script>
+
+<slot />
 ```
 
 - checklist - The checklist store.
+- slot - The custom Header component must have a slot, where the items will be rendered.
 
 ### Custom Item Component
 
