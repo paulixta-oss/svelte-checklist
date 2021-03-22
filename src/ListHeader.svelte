@@ -4,11 +4,9 @@
   let mainCheckbox;
   let newItem = "";
   let showMenu = false;
+  let options;
 
-  console.log($checklist);
-
-  $: if ($checklist) checklist.checkStates();
-  $: options = [...new Set($checklist.data.map((e) => e.value))];
+  $: if ($checklist) options = [...checklist.options()];
   $: if (mainCheckbox) mainCheckbox.checked = $checklist.allChecked;
   $: if (mainCheckbox) mainCheckbox.indeterminate = $checklist.someChecked;
 </script>

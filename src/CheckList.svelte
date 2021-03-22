@@ -10,6 +10,7 @@
 
   let checklist = store(data);
 
+  $: if ($checklist) checklist.checkStates();
   $: selected = [...$checklist.selected];
 </script>
 
