@@ -44,8 +44,8 @@ export default function (data = []) {
       });
       this.checkStates();
     },
-    setAll(checkedState) {
-      checkedState ? this.checkAll() : this.uncheckAll();
+    setAll(state) {
+      state ? this.checkAll() : this.uncheckAll();
     },
     checkOnly(value) {
       update((current) => {
@@ -78,6 +78,9 @@ export default function (data = []) {
         return current;
       });
       this.checkStates();
+    },
+    set(id, state) {
+      state ? this.check(id) : this.uncheck(id);
     },
     toggleAll() {
       update((current) => {
