@@ -14,14 +14,15 @@
   $: selected = [...$checklist.selected];
 </script>
 
-<svelte:component this={Header} {checklist} />
-{#each $checklist.data as item, index (item.id)}
-  <svelte:component
-    this={Item}
-    id={item.id}
-    value={item.value}
-    {index}
-    bind:checked={item.checked}
-    callbacks={$checklist.callbacks}
-  />
-{/each}
+<svelte:component this={Header} {checklist}>
+  {#each $checklist.data as item, index (item.id)}
+    <svelte:component
+      this={Item}
+      id={item.id}
+      value={item.value}
+      {index}
+      bind:checked={item.checked}
+      callbacks={$checklist.callbacks}
+    />
+  {/each}
+</svelte:component>

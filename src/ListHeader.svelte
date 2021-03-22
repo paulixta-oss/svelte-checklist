@@ -64,6 +64,8 @@
   </div>
 </div>
 
+<slot />
+
 <style>
   input[type="text"] {
     margin-bottom: 8px;
