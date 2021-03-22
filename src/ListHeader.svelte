@@ -1,14 +1,16 @@
 <script>
-  export let checked;
+  export let checklist;
 
   let mainCheckbox;
   let newItem = "";
   let showMenu = false;
 
-  $: if ($checked) checked.checkStates();
-  $: options = [...new Set($checked.data.map((e) => e.value))];
-  $: if (mainCheckbox) mainCheckbox.checked = $checked.allChecked;
-  $: if (mainCheckbox) mainCheckbox.indeterminate = $checked.someChecked;
+  console.log($checklist);
+
+  $: if ($checklist) checklist.checkStates();
+  $: options = [...new Set($checklist.data.map((e) => e.value))];
+  $: if (mainCheckbox) mainCheckbox.checked = $checklist.allChecked;
+  $: if (mainCheckbox) mainCheckbox.indeterminate = $checklist.someChecked;
 </script>
 
 <svelte:window
@@ -23,7 +25,7 @@
     class="action"
     on:click={() => {
       if (newItem === "") return;
-      checked.push(newItem, false);
+      checklist.push(newItem, false);
       newItem = "";
     }}>Push</button
   >
@@ -35,7 +37,7 @@
       name="mainCheck"
       type="checkbox"
       bind:this={mainCheckbox}
-      on:click={() => checked.setAll(mainCheckbox.checked)}
+      on:click={() => checklist.setAll(mainCheckbox.checked)}
     />
   </div>
   <div class="select">
@@ -48,12 +50,12 @@
   </div>
 
   <div class="dropdown-content" class:show={showMenu}>
-    <span on:click={() => checked.checkAll()}>Todos</span>
-    <span on:click={() => checked.uncheckAll()}>Nenhum</span>
-    <span on:click={() => checked.toggleAll()}>Inverter</span>
+    <span on:click={() => checklist.checkAll()}>Todos</span>
+    <span on:click={() => checklist.uncheckAll()}>Nenhum</span>
+    <span on:click={() => checklist.toggleAll()}>Inverter</span>
     {#each options as option}
-      <span on:click={() => checked.checkOnly(option)}>{option}</span>
-      <span on:click={() => checked.checkPlus(option)}>+{option}</span>
+      <span on:click={() => checklist.checkOnly(option)}>{option}</span>
+      <span on:click={() => checklist.checkPlus(option)}>+{option}</span>
     {/each}
   </div>
 </div>

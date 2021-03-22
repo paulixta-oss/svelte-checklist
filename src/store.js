@@ -10,6 +10,7 @@ export default function (data = []) {
     allChecked: false,
     someChecked: false,
     noneChecked: true,
+    selected: [],
   };
 
   let { subscribe, update, set } = writable(value);
@@ -22,6 +23,9 @@ export default function (data = []) {
           .map((e) => e.checked)
           .every((v) => !v);
         current.someChecked = !current.allChecked && !current.noneChecked;
+        current.selected = current.data
+          .filter((e) => e.checked)
+          .map((e) => e.value);
         return current;
       });
     },
@@ -112,9 +116,6 @@ export default function (data = []) {
     },
     options() {
       return [...new Set(value.data.map((e) => e.value))];
-    },
-    selected() {
-      return value.data.filter((e) => e.checked).map((e) => e.value);
     },
   };
 

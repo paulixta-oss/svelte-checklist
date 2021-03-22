@@ -10,7 +10,7 @@
 
   let checklist = store(data);
 
-  $: selected = checklist.selected();
+  $: selected = [...$checklist.selected];
 </script>
 
 <svelte:component this={Header} {checklist} />

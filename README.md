@@ -22,11 +22,11 @@ This example will use the built-in Header and Item
 
 ```{html}
 <script>
-import CheckList from "svelte-checklist"
+  import CheckList from "svelte-checklist";
 
-let data = ["Apple", "Banana", "Orange", "Strawberry"]
-let selected = []
+  let data = ["Apple", "Banana", "Orange", "Strawberry"];
+  let selected = [];
 </script>
 
-<Checklist data bind:selected />
+<CheckList bind:data bind:selected />
 ```
