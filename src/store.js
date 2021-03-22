@@ -79,9 +79,6 @@ export default function (data = []) {
       });
       this.checkStates();
     },
-    set(id, state) {
-      state ? this.check(id) : this.uncheck(id);
-    },
     toggleAll() {
       update((current) => {
         current.data.forEach((e) => (e.checked = !e.checked));
