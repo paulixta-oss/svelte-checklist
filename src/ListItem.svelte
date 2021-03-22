@@ -3,13 +3,13 @@
   export let id;
   export let index;
   export let checked = false;
-  export let callbacks = {};
+  export let dispatcher;
 </script>
 
 <label class:even={index % 2}>
   <input type="checkbox" name={value} bind:checked />
   {value}
-  <span on:click|preventDefault={() => callbacks.delete(id)}>&#10060;</span>
+  <span on:click|preventDefault={() => dispatcher("delete", id)}>&#10060;</span>
 </label>
 
 <style>
