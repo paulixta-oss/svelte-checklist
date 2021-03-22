@@ -155,7 +155,7 @@ The custom Item component will be rendered for each item in the data.
   export let id;
   export let index;
   export let checked = false;
-  export let callbacks;
+  export let dispatcher;
 </script>
 ```
 
@@ -165,7 +165,7 @@ All those props are passed from the Checklist component for each item received i
 - value - Each data as it is passed in the Checklist component data prop.
 - index - The index of the item.
 - checked - The check state of the item. It is bound by the main CheckList component, so changes here will update the store.
-- callbacks - A list of callbacks that can be registered by the Custom Header on the store, and be called on each item.
+- dispatcher - A function to call the calbacks registered via the checklist.addCallback function at the Header.
 
 ### Checklist Store
 

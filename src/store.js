@@ -11,8 +11,9 @@ export default function (data = []) {
     someChecked: false,
     noneChecked: true,
     selected: [],
-    callbacks: {},
   };
+
+  let callbacks = {};
 
   let { subscribe, update, set } = writable(value);
 
@@ -119,10 +120,10 @@ export default function (data = []) {
       return [...new Set(value.data.map((e) => e.value))];
     },
     addCallback(name, callback) {
-      update((current) => {
-        value.callbacks[name] = callback;
-        return current;
-      });
+      callbacks[name] = callback;
+    },
+    callCallback(name, ...args) {
+      if (callbacks[name]) return callbacks[name](...args);
     },
   };
 

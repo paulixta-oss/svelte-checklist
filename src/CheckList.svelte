@@ -10,6 +10,10 @@
 
   let checklist = store(data);
 
+  function dispatcher(name, ...args) {
+    checklist.callCallback(name, ...args);
+  }
+
   $: if ($checklist) checklist.checkStates();
   $: selected = [...$checklist.selected];
 </script>
@@ -22,7 +26,7 @@
       value={item.value}
       {index}
       bind:checked={item.checked}
-      callbacks={$checklist.callbacks}
+      {dispatcher}
     />
   {/each}
 </svelte:component>
