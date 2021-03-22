@@ -1,16 +1,15 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-
   export let value = "";
+  export let id;
   export let index;
   export let checked = false;
-
-  let dispatch = createEventDispatcher();
+  export let callbacks = {};
 </script>
 
 <label class:even={index % 2}>
   <input type="checkbox" name={value} bind:checked />
-  {value} <span on:click={() => dispatch("delete")}>&#10060;</span>
+  {value}
+  <span on:click|preventDefault={() => callbacks.delete(id)}>&#10060;</span>
 </label>
 
 <style>

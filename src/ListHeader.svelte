@@ -1,10 +1,16 @@
 <script>
+  import { onMount } from "svelte";
+
   export let checklist;
 
   let mainCheckbox;
   let newItem = "";
   let showMenu = false;
   let options;
+
+  onMount(() => {
+    checklist.addCallback("delete", (id) => checklist.remove(id));
+  });
 
   $: if ($checklist) options = [...checklist.options()];
   $: if (mainCheckbox) mainCheckbox.checked = $checklist.allChecked;

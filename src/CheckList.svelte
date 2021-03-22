@@ -15,15 +15,13 @@
 </script>
 
 <svelte:component this={Header} {checklist} />
-
-<div style="margin-top: 10px;" />
-
 {#each $checklist.data as item, index (item.id)}
   <svelte:component
     this={Item}
+    id={item.id}
     value={item.value}
     {index}
     bind:checked={item.checked}
-    on:delete={(e) => checklist.remove(item.id)}
+    callbacks={$checklist.callbacks}
   />
 {/each}
