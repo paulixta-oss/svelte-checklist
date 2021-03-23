@@ -12,7 +12,8 @@
     checklist.addCallback("delete", (id) => checklist.remove(id));
   });
 
-  $: if ($checklist) options = [...checklist.options()];
+  $: if ($checklist)
+    options = [...new Set($checklist.data.map((e) => e.value))];
   $: if (mainCheckbox) mainCheckbox.checked = $checklist.allChecked;
   $: if (mainCheckbox) mainCheckbox.indeterminate = $checklist.someChecked;
 </script>
@@ -57,9 +58,19 @@
     <span on:click={() => checklist.checkAll()}>All</span>
     <span on:click={() => checklist.uncheckAll()}>None</span>
     <span on:click={() => checklist.toggleAll()}>Toggle</span>
+    <span on:click={() => checklist.checkOnly((_, i) => i % 2 === 1)}
+      >Pares</span
+    >
+    <span on:click={() => checklist.checkOnly((_, i) => i % 2 === 0)}
+      >Ímpares</span
+    >
     {#each options as option}
-      <span on:click={() => checklist.checkOnly(option)}>{option}</span>
-      <span on:click={() => checklist.checkPlus(option)}>+{option}</span>
+      <span on:click={() => checklist.checkOnly((e) => e.value === option)}
+        >{option}</span
+      >
+      <span on:click={() => checklist.checkPlus((e) => e.value === option)}
+        >+{option}</span
+      >
     {/each}
   </div>
 </div>

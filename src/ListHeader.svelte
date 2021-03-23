@@ -5,7 +5,6 @@
 
   let mainCheckbox;
   let newItem = "";
-  let options;
 
   onMount(() => {
     checklist.addCallback("delete", (id) => checklist.remove(id));
