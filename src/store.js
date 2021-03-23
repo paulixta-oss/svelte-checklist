@@ -70,51 +70,32 @@ export default function (data = [], start = noop) {
   }
 
   const methods = {
-    checkStates() {
-      update((current) => {
-        current.allChecked = current.data.map((e) => e.checked).every((v) => v);
-        current.noneChecked = current.data
-          .map((e) => e.checked)
-          .every((v) => !v);
-        current.someChecked = !current.allChecked && !current.noneChecked;
-        current.selected = current.data
-          .filter((e) => e.checked)
-          .map((e) => e.value);
-        return current;
-      });
-    },
     checkAll() {
       update((current) => {
         current.data.forEach((e) => (e.checked = true));
         return current;
       });
-      this.checkStates();
     },
     uncheckAll() {
       update((current) => {
         current.data.forEach((e) => (e.checked = false));
         return current;
       });
-      this.checkStates();
     },
     setAll(state) {
       state ? this.checkAll() : this.uncheckAll();
     },
-    checkOnly(value) {
+    checkOnly(fn) {
       update((current) => {
-        current.data.forEach((e) => (e.checked = e.value === value));
+        current.data.forEach((e, i) => (e.checked = fn(e, i)));
         return current;
       });
-      this.checkStates();
     },
-    checkPlus(value) {
+    checkPlus(fn) {
       update((current) => {
-        current.data.forEach(
-          (e) => (e.checked = e.value === value ? true : e.checked)
-        );
+        current.data.forEach((e, i) => (e.checked = fn(e, i) || e.checked));
         return current;
       });
-      this.checkStates();
     },
     check(id) {
       update((current) => {
@@ -122,7 +103,6 @@ export default function (data = [], start = noop) {
         current.data[index].checked = true;
         return current;
       });
-      this.checkStates();
     },
     uncheck(id) {
       update((current) => {
@@ -130,14 +110,12 @@ export default function (data = [], start = noop) {
         current.data[index].checked = false;
         return current;
       });
-      this.checkStates();
     },
     toggleAll() {
       update((current) => {
         current.data.forEach((e) => (e.checked = !e.checked));
         return current;
       });
-      this.checkStates();
     },
     toggle(id) {
       update((current) => {
@@ -145,31 +123,28 @@ export default function (data = [], start = noop) {
         current.data[index].checked = !current.data[index].checked;
         return current;
       });
-      this.checkStates();
     },
     push(value, checked = false) {
+      let id = new Date().getTime().toString(36);
       update((current) => {
         current.data = [
           ...current.data,
           {
-            id: new Date().getTime().toString(36),
+            id,
             value,
             checked,
           },
         ];
         return current;
       });
-      this.checkStates();
+      return id;
     },
     remove(id) {
       update((current) => {
         let index = current.data.findIndex((e) => e.id === id);
-        current.data.splice(index, 1);
+        if (index !== -1) current.data.splice(index, 1);
         return current;
       });
-    },
-    options() {
-      return [...new Set(value.data.map((e) => e.value))];
     },
     addCallback(name, callback) {
       callbacks[name] = callback;

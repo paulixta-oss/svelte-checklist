@@ -14,7 +14,6 @@
     checklist.callCallback(name, ...args);
   }
 
-  $: if ($checklist) checklist.checkStates();
   $: selected = [...$checklist.selected];
 </script>
 
