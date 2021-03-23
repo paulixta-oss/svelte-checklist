@@ -186,7 +186,6 @@ type Checklist = {
   someChecked: boolean;
   noneChecked: boolean;
   selected: any[];
-  callbacks: Record<string, function>;
 };
 ```
 
@@ -195,21 +194,19 @@ type Checklist = {
 - noneChecked (automatic update) - True if no itemas are checked
 - someChecked (automatic update) - True if some items are checked, false in case of allChecked or noneChecked
 - selected (automatic update) - The entries checked
-- callbacks - Registered by calling checkllist.addCallback (see below), usually to be performed at the Header.
 
 #### Store Methods
 
-- checkStates()
 - checkAll()
 - uncheckAll()
 - setAll(checkedState)
-- checkOnly(value)
-- checkPlus(value)
+- checkOnly(fn)
+- checkPlus(fn)
 - check(id)
 - uncheck(id)
 - toggleAll()
 - toggle(id)
 - push(value, checked = false)
 - remove(item)
-- options()
 - addCallback(name, callback)
+- callCallback(name, ...args)
