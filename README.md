@@ -4,15 +4,13 @@
 
 It started as a learning question in the [Svelte Brasil](https://sveltebrasil.dev/) Telegram group. And took it as a personal challenge to create a Svelte Component and experiment a few things, like passing components as props.
 
-The Checklist component implements the logic to build any solution that can be built around a checklist. The customization happens with a list of Items and two components that are transmitted via props: a Wrapper and an Item.
+The CheckList component handles the logic and behaviour of the checklist. It works based on two sets of data: an items list and a meta object. The former is the list of items on your checklist, the latter any other information relevant for your customization. By the way, the CheckList component can be customized with the help of two optional components: a Wrapper component and an Item component.
 
-The Wrapper handles everything around the checklist, it receives a list of Items via props, and it's the Wrapper responsibility via a default <slot /> to define the place where the main component will place the list of Items.
+The sets of data are stored in a custom Svelte Store, that can be accessed in the Wrapper component.
 
-The Item is a component that is instatiated for each item on the checklist.
+The Wrapper works as a "controller" for your checklist, it's a standard Svelte component with only two requirements that must be implemented. (1) It must expect a prop named checklist, the custom Svelte Store with the relevant data structure of the component; and (2) it must have a <slot /> entry, that's where the CheckList component will insert the items provided. This way you can design and style the surrounding of your checklist, including headers and footers.
 
-## Demo
-
-Demo is on this [REPL](https://svelte.dev/repl/a39f9752ff2541f59761051faf834c6e). Fork and experiment!!!
+The Item is another Svelte component a component, it will be instatiated for each item on the checklist.
 
 ## Installation
 
@@ -24,7 +22,7 @@ npm install -D svelte-checklist
 
 ### Basic usage
 
-This example will use the built-in Wrapper and Item
+This example will use the built-in Wrapper and Item. Demo is on [REPL](https://svelte.dev/repl/a39f9752ff2541f59761051faf834c6e).
 
 ```{html}
 <script>
@@ -61,11 +59,11 @@ Check this example on [REPL](https://svelte.dev/repl/1f0878155cb84808ab43a94de21
 
 <!-- Item.svelte -->
 <script>
-  export let value = "";
+  export let item = "";
   export let checked = false;
 </script>
 
-<p on:click={() => (checked = !checked)} class:checked>{value}</p>
+<p on:click={() => (checked = !checked)} class:checked>{item}</p>
 
 <style>
   p {
@@ -135,7 +133,7 @@ let selected;
 
 ### Custom Wrapper Component
 
-The custom Wrapper component is rendered once per checklist, it has full access to the checklist store, and can make full use of it. It is currently rendered before the list of Items.
+The custom Wrapper component is rendered once per checklist, it has full access to the checklist store, and can make full use of it. It must contain a <slot /> element.
 
 #### Props Interface
 
