@@ -2,8 +2,9 @@ import { noop, safe_not_equal } from "svelte/internal";
 
 const subscriber_queue = [];
 
-export default function (items = [], start = noop) {
+export default function (meta = {}, items = [], start = noop) {
   let data = {
+    meta,
     entries: items.map((item) => ({
       id: (new Date().getTime() + Math.random()).toString(36),
       item,

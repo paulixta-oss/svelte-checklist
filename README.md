@@ -124,9 +124,10 @@ import CheckList from "svelte-checklist"
 let selected;
 </script>
 
-<CheckList {items} bind:selected {Wrapper} {Item} />
+<CheckList {meta} {items} bind:selected {Wrapper} {Item} />
 ```
 
+- meta (optional) - Any other information you may use in a custom Wrapper (i.e. previous and next endpoints for navigation)
 - items (required) - An array of items. Works fine with both primitive and complex items types, although the latter will require a custom Item component to handle the vizualization of the object.
 - selected (required) - The resulting array of selected elements. It must be bound to a local variable so the final state of the component can be manipulated.
 - Wrapper (optional) - A custom Wrapper component. Please check the Custom Wrapper Component documentation.
@@ -157,7 +158,7 @@ The custom Item component will be rendered for each item in the items.
 
 ```
 <script>
-  export let value = "";
+  export let item = "";
   export let id;
   export let index;
   export let checked = false;
@@ -168,7 +169,7 @@ The custom Item component will be rendered for each item in the items.
 All those props are passed from the Checklist component for each item received in it's items prop.
 
 - id - The id of the item in the checklist store items entry.
-- value - Each items as it is passed in the Checklist component items prop.
+- item - Each item as passed in the Checklist component items prop.
 - index - The index of the item.
 - checked - The check state of the item. It is bound by the main CheckList component, so changes here will update the store.
 - dispatcher - A function to call the calbacks registered via the checklist.addCallback function at the Wrapper.
@@ -187,6 +188,7 @@ type Entry = {
 };
 
 type Checklist = {
+  meta: any
   entries: Entry[];
   allChecked: boolean;
   someChecked: boolean;
@@ -195,6 +197,7 @@ type Checklist = {
 };
 ```
 
+- meta - The meta data as described in the CheckList component API
 - entries - The list of entries
 - AllChecked (automatic update) - True if all entries are checked
 - noneChecked (automatic update) - True if no entries are checked
