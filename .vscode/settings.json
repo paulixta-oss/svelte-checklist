@@ -1,0 +1,11 @@
+{
+  "conventionalCommits.scopes": [
+    "store",
+    "checklist",
+    "wrapper_api",
+    "item_api",
+    "default_wrapper",
+    "default_item",
+    "samples"
+  ]
+}
