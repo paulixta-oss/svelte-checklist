@@ -215,5 +215,7 @@ type Checklist = {
 - toggle(id)
 - push(value, checked = false)
 - remove(item)
+- replace(id, item)
+- replaceAll(items)
 - addCallback(name, callback)
 - callCallback(name, ...args)

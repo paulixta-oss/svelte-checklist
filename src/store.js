@@ -5,11 +5,7 @@ const subscriber_queue = [];
 export default function (meta = {}, items = [], start = noop) {
   let data = {
     meta,
-    entries: items.map((item) => ({
-      id: (new Date().getTime() + Math.random()).toString(36),
-      item,
-      checked: false,
-    })),
+    entries: entrifyItems(items),
     allChecked: false,
     someChecked: false,
     noneChecked: true,
@@ -20,6 +16,18 @@ export default function (meta = {}, items = [], start = noop) {
 
   let stop;
   const subscribers = [];
+
+  function entrifyItems(items) {
+    return items.map((item) => entrifyItem(item));
+  }
+
+  function entrifyItem(item, checked = false) {
+    return {
+      id: (new Date().getTime() + Math.random()).toString(36),
+      item,
+      checked,
+    };
+  }
 
   function set(new_data) {
     if (safe_not_equal(data, new_data)) {
@@ -126,16 +134,8 @@ export default function (meta = {}, items = [], start = noop) {
       });
     },
     push(item, checked = false) {
-      let id = new Date().getTime().toString(36);
       update((current) => {
-        current.entries = [
-          ...current.entries,
-          {
-            id,
-            item,
-            checked,
-          },
-        ];
+        current.entries = [...current.entries, entrifyItem(item, checked)];
         return current;
       });
       return id;
@@ -144,6 +144,20 @@ export default function (meta = {}, items = [], start = noop) {
       update((current) => {
         let index = current.entries.findIndex((e) => e.id === id);
         if (index !== -1) current.entries.splice(index, 1);
+        return current;
+      });
+    },
+    replace(id, item) {
+      update((current) => {
+        let index = current.entries.findIndex((e) => e.id === id);
+        if (index !== -1) current.entries[index].item = item;
+        return current;
+      });
+    },
+
+    replaceAll(items) {
+      update((current) => {
+        current.entries = entrifyItems(items);
         return current;
       });
     },
