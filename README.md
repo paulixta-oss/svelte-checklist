@@ -4,6 +4,12 @@
 
 It started as a learning question in the [Svelte Brasil](https://sveltebrasil.dev/) Telegram group. And took it as a personal challenge to create a Svelte Component and experiment a few things, like passing components as props.
 
+The Checklist component implements the logic to build any solution that can be built around a checklist. The customization happens with a list of Items and two components that are transmitted via props: a Wrapper and an Item.
+
+The Wrapper handles everything around the checklist, it receives a list of Items via props, and it's the Wrapper responsibility via a default <slot /> to define the place where the main component will place the list of Items.
+
+The Item is a component that is instatiated for each item on the checklist.
+
 ## Demo
 
 Demo is on this [REPL](https://svelte.dev/repl/a39f9752ff2541f59761051faf834c6e). Fork and experiment!!!
@@ -18,22 +24,22 @@ npm install -D svelte-checklist
 
 ### Basic usage
 
-This example will use the built-in Header and Item
+This example will use the built-in Wrapper and Item
 
 ```{html}
 <script>
   import CheckList from "svelte-checklist";
 
-  let data = ["Apple", "Banana", "Orange", "Strawberry"];
+  let items = ["Apple", "Banana", "Orange", "Strawberry"];
   let selected = [];
 </script>
 
-<CheckList bind:data bind:selected />
+<CheckList bind:items bind:selected />
 ```
 
 ### Advanced usage
 
-As mentioned this is a customizable component. That means that you can pass your own Header and Item components to the CheckList component.
+As mentioned this is a customizable component. That means that you can pass your own Wrapper and Item components to the CheckList component.
 
 #### Custom Item
 
@@ -47,11 +53,11 @@ Check this example on [REPL](https://svelte.dev/repl/1f0878155cb84808ab43a94de21
   import CheckList from "svelte-checklist";
 	import Item from "./Item.svelte";
 
-  let data = ["Apple", "Banana", "Orange", "Strawberry"];
+  let items = ["Apple", "Banana", "Orange", "Strawberry"];
   let selected = [];
 </script>
 
-<CheckList {data} bind:selected {Item} />
+<CheckList {items} bind:selected {Item} />
 
 <!-- Item.svelte -->
 <script>
@@ -72,9 +78,9 @@ Check this example on [REPL](https://svelte.dev/repl/1f0878155cb84808ab43a94de21
 </style>
 ```
 
-#### Custom Header
+#### Custom Wrapper
 
-It is possible to add a custom Header component, and make full use of the checklist store. See API for documentation.
+It is possible to add a custom Wrapper component, and make full use of the checklist store. See API for documentation.
 
 Check this example on [REPL](https://svelte.dev/repl/0deec06959224a08b418efd2f7778478)
 
@@ -82,19 +88,19 @@ Check this example on [REPL](https://svelte.dev/repl/0deec06959224a08b418efd2f77
 <!-- App.svelte -->
 <script>
   import CheckList from "svelte-checklist";
-	import Header from "./Header.svelte"
+	import Wrapper from "./Wrapper.svelte"
 
-  let data = ["Wash dishes","Feed pets","Do laundry","Prepare meal","Clean bathrooms","Dust"];
+  let items = ["Wash dishes","Feed pets","Do laundry","Prepare meal","Clean bathrooms","Dust"];
   let selected = [];
 </script>
 
-<CheckList {data} bind:selected {Header} />
+<CheckList {items} bind:selected {Wrapper} />
 
-<!-- Header.svelte -->
+<!-- Wrapper.svelte -->
 <script>
   export let checklist;
 
-  $: togo = $checklist.data.length - $checklist.selected.length;
+  $: togo = $checklist.items.length - $checklist.selected.length;
 </script>
 
 {#if $checklist.allChecked}
@@ -118,17 +124,17 @@ import CheckList from "svelte-checklist"
 let selected;
 </script>
 
-<CheckList {data} bind:selected {Header} {Item} />
+<CheckList {items} bind:selected {Wrapper} {Item} />
 ```
 
-- data (required) - An array of data. Works fine with both primitive and complex data types, although the latter will require a custom Item component to handle the vizualization of the object.
+- items (required) - An array of items. Works fine with both primitive and complex items types, although the latter will require a custom Item component to handle the vizualization of the object.
 - selected (required) - The resulting array of selected elements. It must be bound to a local variable so the final state of the component can be manipulated.
-- Header (optional) - A custom Header component. Please check the Custom Header Component documentation.
+- Wrapper (optional) - A custom Wrapper component. Please check the Custom Wrapper Component documentation.
 - Item (optional) - A custom Item component. Please check the Custom Item Component documentation.
 
-### Custom Header Component
+### Custom Wrapper Component
 
-The custom Header component is rendered once per checklist, it has full access to the checklist store, and can make full use of it. It is currently rendered before the list of Items.
+The custom Wrapper component is rendered once per checklist, it has full access to the checklist store, and can make full use of it. It is currently rendered before the list of Items.
 
 #### Props Interface
 
@@ -141,11 +147,11 @@ The custom Header component is rendered once per checklist, it has full access t
 ```
 
 - checklist - The checklist store.
-- slot - The custom Header component must have a slot, where the items will be rendered.
+- slot - The custom Wrapper component must have a slot, where the items will be rendered.
 
 ### Custom Item Component
 
-The custom Item component will be rendered for each item in the data.
+The custom Item component will be rendered for each item in the items.
 
 #### Props Interface
 
@@ -159,13 +165,13 @@ The custom Item component will be rendered for each item in the data.
 </script>
 ```
 
-All those props are passed from the Checklist component for each item received in it's data prop.
+All those props are passed from the Checklist component for each item received in it's items prop.
 
-- id - The id of the item in the checklist store data entry.
-- value - Each data as it is passed in the Checklist component data prop.
+- id - The id of the item in the checklist store items entry.
+- value - Each items as it is passed in the Checklist component items prop.
 - index - The index of the item.
 - checked - The check state of the item. It is bound by the main CheckList component, so changes here will update the store.
-- dispatcher - A function to call the calbacks registered via the checklist.addCallback function at the Header.
+- dispatcher - A function to call the calbacks registered via the checklist.addCallback function at the Wrapper.
 
 ### Checklist Store
 
@@ -176,12 +182,12 @@ The value is what you'll interact with Svelte's $checklist syntax.
 ```
 type Entry = {
   id: string;
-  value: any;
+  item: any;
   checked: boolean;
 };
 
 type Checklist = {
-  data: Entry[];
+  entries: Entry[];
   allChecked: boolean;
   someChecked: boolean;
   noneChecked: boolean;
@@ -189,11 +195,11 @@ type Checklist = {
 };
 ```
 
-- data - The list of Entry's
-- AllChecked (automatic update) - True if all items are checked
-- noneChecked (automatic update) - True if no itemas are checked
-- someChecked (automatic update) - True if some items are checked, false in case of allChecked or noneChecked
-- selected (automatic update) - The entries checked
+- entries - The list of entries
+- AllChecked (automatic update) - True if all entries are checked
+- noneChecked (automatic update) - True if no entries are checked
+- someChecked (automatic update) - True if some entries are checked, false in case of allChecked or noneChecked
+- selected (automatic update) - The checked entries
 
 #### Store Methods
 

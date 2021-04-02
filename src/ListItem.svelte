@@ -1,5 +1,5 @@
 <script>
-  export let value = "";
+  export let item = "";
   export let id;
   export let index;
   export let checked = false;
@@ -7,8 +7,8 @@
 </script>
 
 <label class:even={index % 2}>
-  <input type="checkbox" name={value} bind:checked />
-  {value}
+  <input type="checkbox" name={item} bind:checked />
+  {item}
   <span on:click|preventDefault={() => dispatcher("delete", id)}>&#10060;</span>
 </label>
 

@@ -1,7 +1,7 @@
 <script>
   export let checklist;
 
-  $: togo = $checklist.data.length - $checklist.selected.length;
+  $: togo = $checklist.items.length - $checklist.selected.length;
 </script>
 
 {#if $checklist.allChecked}

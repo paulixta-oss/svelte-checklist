@@ -13,7 +13,7 @@
   });
 
   $: if ($checklist)
-    options = [...new Set($checklist.data.map((e) => e.value))];
+    options = [...new Set($checklist.entries.map((e) => e.item))];
   $: if (mainCheckbox) mainCheckbox.checked = $checklist.allChecked;
   $: if (mainCheckbox) mainCheckbox.indeterminate = $checklist.someChecked;
 </script>
@@ -59,16 +59,16 @@
     <span on:click={() => checklist.uncheckAll()}>None</span>
     <span on:click={() => checklist.toggleAll()}>Toggle</span>
     <span on:click={() => checklist.checkOnly((_, i) => i % 2 === 1)}
-      >Pares</span
+      >Even lines</span
     >
     <span on:click={() => checklist.checkOnly((_, i) => i % 2 === 0)}
-      >Ímpares</span
+      >Odd lines</span
     >
     {#each options as option}
-      <span on:click={() => checklist.checkOnly((e) => e.value === option)}
+      <span on:click={() => checklist.checkOnly((e) => e.item === option)}
         >{option}</span
       >
-      <span on:click={() => checklist.checkPlus((e) => e.value === option)}
+      <span on:click={() => checklist.checkPlus((e) => e.item === option)}
         >+{option}</span
       >
     {/each}

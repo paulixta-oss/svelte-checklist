@@ -2,11 +2,11 @@ import { noop, safe_not_equal } from "svelte/internal";
 
 const subscriber_queue = [];
 
-export default function (data = [], start = noop) {
-  let value = {
-    data: data.map((v) => ({
+export default function (items = [], start = noop) {
+  let data = {
+    entries: items.map((item) => ({
       id: (new Date().getTime() + Math.random()).toString(36),
-      value: v,
+      item,
       checked: false,
     })),
     allChecked: false,
@@ -20,13 +20,13 @@ export default function (data = [], start = noop) {
   let stop;
   const subscribers = [];
 
-  function set(new_value) {
-    if (safe_not_equal(value, new_value)) {
-      value = new_value;
-      value.allChecked = value.data.map((e) => e.checked).every((v) => v);
-      value.noneChecked = value.data.map((e) => e.checked).every((v) => !v);
-      value.someChecked = !value.allChecked && !value.noneChecked;
-      value.selected = value.data.filter((e) => e.checked).map((e) => e.value);
+  function set(new_data) {
+    if (safe_not_equal(data, new_data)) {
+      data = new_data;
+      data.allChecked = data.entries.map((e) => e.checked).every((v) => v);
+      data.noneChecked = data.entries.map((e) => e.checked).every((v) => !v);
+      data.someChecked = !data.allChecked && !data.noneChecked;
+      data.selected = data.entries.filter((e) => e.checked).map((e) => e.item);
     }
     if (stop) {
       // store is ready
@@ -34,7 +34,7 @@ export default function (data = [], start = noop) {
       for (let i = 0; i < subscribers.length; i += 1) {
         const s = subscribers[i];
         s[1]();
-        subscriber_queue.push(s, value);
+        subscriber_queue.push(s, data);
       }
       if (run_queue) {
         for (let i = 0; i < subscriber_queue.length; i += 2) {
@@ -46,7 +46,7 @@ export default function (data = [], start = noop) {
   }
 
   function update(fn) {
-    set(fn(value));
+    set(fn(data));
   }
 
   function subscribe(run, invalidate = noop) {
@@ -55,7 +55,7 @@ export default function (data = [], start = noop) {
     if (subscribers.length === 1) {
       stop = start(set) || noop;
     }
-    run(value);
+    run(data);
 
     return () => {
       const index = subscribers.indexOf(subscriber);
@@ -72,13 +72,13 @@ export default function (data = [], start = noop) {
   const methods = {
     checkAll() {
       update((current) => {
-        current.data.forEach((e) => (e.checked = true));
+        current.entries.forEach((e) => (e.checked = true));
         return current;
       });
     },
     uncheckAll() {
       update((current) => {
-        current.data.forEach((e) => (e.checked = false));
+        current.entries.forEach((e) => (e.checked = false));
         return current;
       });
     },
@@ -87,51 +87,51 @@ export default function (data = [], start = noop) {
     },
     checkOnly(fn) {
       update((current) => {
-        current.data.forEach((e, i) => (e.checked = fn(e, i)));
+        current.entries.forEach((e, i) => (e.checked = fn(e, i)));
         return current;
       });
     },
     checkPlus(fn) {
       update((current) => {
-        current.data.forEach((e, i) => (e.checked = fn(e, i) || e.checked));
+        current.entries.forEach((e, i) => (e.checked = fn(e, i) || e.checked));
         return current;
       });
     },
     check(id) {
       update((current) => {
-        let index = current.data.findIndex((e) => e.id === id);
-        current.data[index].checked = true;
+        let index = current.entries.findIndex((e) => e.id === id);
+        current.entries[index].checked = true;
         return current;
       });
     },
     uncheck(id) {
       update((current) => {
-        let index = current.data.findIndex((e) => e.id === id);
-        current.data[index].checked = false;
+        let index = current.entries.findIndex((e) => e.id === id);
+        current.entries[index].checked = false;
         return current;
       });
     },
     toggleAll() {
       update((current) => {
-        current.data.forEach((e) => (e.checked = !e.checked));
+        current.entries.forEach((e) => (e.checked = !e.checked));
         return current;
       });
     },
     toggle(id) {
       update((current) => {
-        let index = current.data.findIndex((e) => e.id === id);
-        current.data[index].checked = !current.data[index].checked;
+        let index = current.entries.findIndex((e) => e.id === id);
+        current.entries[index].checked = !current.entries[index].checked;
         return current;
       });
     },
-    push(value, checked = false) {
+    push(item, checked = false) {
       let id = new Date().getTime().toString(36);
       update((current) => {
-        current.data = [
-          ...current.data,
+        current.entries = [
+          ...current.entries,
           {
             id,
-            value,
+            item,
             checked,
           },
         ];
@@ -141,8 +141,8 @@ export default function (data = [], start = noop) {
     },
     remove(id) {
       update((current) => {
-        let index = current.data.findIndex((e) => e.id === id);
-        if (index !== -1) current.data.splice(index, 1);
+        let index = current.entries.findIndex((e) => e.id === id);
+        if (index !== -1) current.entries.splice(index, 1);
         return current;
       });
     },

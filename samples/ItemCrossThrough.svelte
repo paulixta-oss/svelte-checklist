@@ -1,9 +1,9 @@
 <script>
-  export let value = "";
+  export let item = "";
   export let checked = false;
 </script>
 
-<p on:click={() => (checked = !checked)} class:checked>{value}</p>
+<p on:click={() => (checked = !checked)} class:checked>{item}</p>
 
 <style>
   p {

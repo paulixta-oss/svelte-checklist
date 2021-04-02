@@ -1,14 +1,15 @@
 <script>
   import store from "./store.js";
-  import ListHeader from "./ListHeader.svelte";
+  import ListWrapper from "./ListWrapper.svelte";
   import ListItem from "./ListItem.svelte";
+  import { derived } from "svelte/store";
 
-  export let data = [];
+  export let items = [];
   export let selected = [];
-  export let Header = ListHeader;
+  export let Wrapper = ListWrapper;
   export let Item = ListItem;
 
-  let checklist = store(data);
+  let checklist = store(items);
 
   function dispatcher(name, ...args) {
     checklist.callCallback(name, ...args);
@@ -17,12 +18,12 @@
   $: selected = [...$checklist.selected];
 </script>
 
-<svelte:component this={Header} {checklist}>
-  {#each $checklist.data as item, index (item.id)}
+<svelte:component this={Wrapper} {checklist}>
+  {#each $checklist.entries as item, index (item.id)}
     <svelte:component
       this={Item}
       id={item.id}
-      value={item.value}
+      item={item.item}
       {index}
       bind:checked={item.checked}
       {dispatcher}
