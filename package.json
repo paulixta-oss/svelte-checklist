@@ -9,6 +9,8 @@
   },
   "homepage": "https://github.com/rodgco/svelte-checklist",
   "svelte": "src/index.js",
+  "module": "dist/index.mjs",
+  "main": "dist/index.js",
   "scripts": {
     "build": "rollup -c",
     "prepublishOnly": "npm run build"
