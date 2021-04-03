@@ -154,10 +154,15 @@ export default function (meta = {}, items = [], start = noop) {
         return current;
       });
     },
-
     replaceAll(items) {
       update((current) => {
         current.entries = entrifyItems(items);
+        return current;
+      });
+    },
+    appendItems(items) {
+      update((current) => {
+        current.entries = [...current.entries, ...entrifyItems(items)];
         return current;
       });
     },
