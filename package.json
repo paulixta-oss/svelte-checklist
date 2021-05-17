@@ -1,13 +1,13 @@
 {
   "name": "svelte-checklist",
   "description": "A customizable checklist made in Svelte",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "license": "MIT",
   "author": "Rodrigo Couto",
   "bugs": {
-    "url": "https://github.com/rodgco/svelte-checklist/issues"
+    "url": "https://github.com/paulixta-oss/svelte-checklist/issues"
   },
-  "homepage": "https://github.com/rodgco/svelte-checklist",
+  "homepage": "https://github.com/paulixta-oss/svelte-checklist",
   "svelte": "src/index.js",
   "module": "dist/index.mjs",
   "main": "dist/index.js",
